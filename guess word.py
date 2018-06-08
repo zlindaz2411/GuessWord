@@ -23,7 +23,7 @@ def make_button():
             Counter.countGuessed += random_word.count(button['text'])
         else:
             Counter.countNotGuessed += 1
-            count_string.set(str(Counter.countNotGuessed))
+            count_string.set(str(Counter.countNotGuessed) + "/5")
         Counter.is_changed = False
 
     def set_text(button):
@@ -88,7 +88,7 @@ def make_button():
     buttonZ.grid(row=6, column=4, sticky=W)
     label_wrong= Label(frame2, text= "Wrong: ").grid(row=6,column =5, sticky =W)
     count_string = StringVar()
-    count_string.set(str(Counter.countNotGuessed))
+    count_string.set(str(Counter.countNotGuessed) + "/5")
     label_count= Label(frame2, textvariable =count_string).grid(row =6, column = 6, sticky=W)
 
 #POPULATE:
