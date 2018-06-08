@@ -19,10 +19,8 @@ def make_button():
             sys.exit()
 
     def increase_count(button):
-        print("change" + str(Counter.is_changed))
         if(Counter.is_changed):
             Counter.countGuessed += random_word.count(button['text'])
-            print("random: " + str(random_word.count(button['text'])))
         else:
             Counter.countNotGuessed += 1
             count_string.set(str(Counter.countNotGuessed))
@@ -33,8 +31,6 @@ def make_button():
                 if b.get_content() == button['text']:
                  b['text'] = b.get_content()
                  Counter.is_changed = True
-                 print(str(Counter.is_changed))
-            print(str(Counter.countGuessed))
             increase_count(button)
             check_lose_win()
 
