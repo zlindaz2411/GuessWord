@@ -3,15 +3,13 @@ from tkinter import messagebox
 import random
 import sys
 
-#2 things left: countNot Guessed and countGuessed
-
 class Counter(object):
         countNotGuessed = 0
         countGuessed = 0
+        is_changed = False
 
 #EVENTS:
 def make_button():
-
     def check_lose_win():
         if (Counter.countNotGuessed > 5):
             messagebox.showwarning("You lose", "You guessed wrong more than 5 times, you LOSE, haha, dumbass")
@@ -19,18 +17,26 @@ def make_button():
         if(Counter.countGuessed > len(random_word)-1):
             messagebox.showwarning("Congratulations", "You guessed the word, you WIN!")
             sys.exit()
-    def increase_count():
-        Counter.countNotGuessed += 1
-        count_string.set(str(Counter.countNotGuessed))
+
+    def increase_count(button):
+        print("change" + str(Counter.is_changed))
+        if(Counter.is_changed):
+            Counter.countGuessed += random_word.count(button['text'])
+            print("random: " + str(random_word.count(button['text'])))
+        else:
+            Counter.countNotGuessed += 1
+            count_string.set(str(Counter.countNotGuessed))
+        Counter.is_changed = False
 
     def set_text(button):
-        for b in buttons:
-            if b.get_content() == button['text']:
-                b['text'] = b.get_content()
-                Counter.countGuessed += random_word.count(button["text"])
-            else:
-                increase_count()
-        #check_lose_win
+            for b in buttons:
+                if b.get_content() == button['text']:
+                 b['text'] = b.get_content()
+                 Counter.is_changed = True
+                 print(str(Counter.is_changed))
+            print(str(Counter.countGuessed))
+            increase_count(button)
+            check_lose_win()
 
     buttonA = Button(frame2, text="A", width=10, command = lambda: set_text(buttonA))
     buttonA.grid(row=3, column=0, sticky=W)
