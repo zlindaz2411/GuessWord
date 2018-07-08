@@ -9,14 +9,14 @@ class Counter(object):
         is_changed = False
 
 #EVENTS:
-def make_button():
+def make_button(random_word):
     def check_lose_win():
         if (Counter.countNotGuessed > 5):
             messagebox.showwarning("You lose", "You guessed wrong more than 5 times, you LOSE, haha, dumbass")
             sys.exit()
-        if(Counter.countGuessed > len(random_word)-1):
-            messagebox.showwarning("Congratulations", "You guessed the word, you WIN!")
-            sys.exit()
+        if (Counter.countGuessed > len(random_word) - random_word.count(" ")-1):
+                messagebox.showwarning("Congratulations", "You guessed the word, you WIN!")
+                sys.exit()
 
     def increase_count(button):
         if(Counter.is_changed):
@@ -86,27 +86,25 @@ def make_button():
     buttonY.grid(row=6, column=3, sticky=W)
     buttonZ = Button(frame2, text="Z", width=10, command = lambda: set_text(buttonZ))
     buttonZ.grid(row=6, column=4, sticky=W)
-    label_wrong= Label(frame2, text= "Wrong: ").grid(row=6,column =5, sticky =W)
+    Label(frame2, text= "Wrong: ").grid(row=6,column =5, sticky =W)
     count_string = StringVar()
     count_string.set(str(Counter.countNotGuessed) + "/5")
-    label_count= Label(frame2, textvariable =count_string).grid(row =6, column = 6, sticky=W)
+    Label(frame2, textvariable =count_string).grid(row =6, column = 6, sticky=W)
 
 #POPULATE:
-list = ["ELEPHANT", "MATHEMATICS", "COMPUTER", "BAZINGA", "ZIGZAG", "YOLO", "SNAKE",
-        "CAT", "MEOW", "WORLD", "JOHN", "SNOW", "THRONE", "DRAGON", "FRIENDS",
-        "HOUSE", "LONDON", "THEORY", "WEIGHT", "SCIENTIST", "WINTER", "AUTUMN", "PIANO", "PALACE",
-        "INCOMPREHENSIBILITY", "INTELLIGENCE", "WOLVES", "MOTHER", "FATHER", "PSYCHOLOGY",
-        "PHILOSOPHY", "UNCOPYRIGHTABLE", "SPONGEBOB", "ANOMALISTIC", "ACCOUNTING", "MAGNANIMOUS",
-        "PENULTIMATE", "PERFIDIOUSNESS", "DUMBASS", "WINEBIBBER", "DRUG", "PAPRIKA"]
-random_word = random.choice(list)
+list_easy = ["ZIGZAG", "YOLO", "SNAKE",
+        "CAT", "MEOW", "WORLD", "THRONE", "DRAGON", "FRIENDS",
+        "HOUSE", "LONDON", "THEORY", "WEIGHT",  "WINTER", "AUTUMN", "PIANO", "PALACE", "WOLVES", "MOTHER", "FATHER",
+              "DRUG", "PAPRIKA"]
+random_easy = random.choice(list_easy)
 
-
-#GUI:
-root = Tk()
-
-frame = Frame(root)
-frame2 = Frame(root)
-title_label = Label(root, text="Guess the word").pack()
+list_medium = ["PSYCHOLOGY","PHILOSOPHY", "SPONGEBOB", "ACCOUNTING", "MAGNANIMOUS",
+        "PENULTIMATE",  "DUMBASS", "WINEBIBBER","ELEPHANT", "MATHEMATICS", "COMPUTER", "BAZINGA", "INTELLIGENCE","SCIENTIST","JOHN SNOW"]
+random_medium = random.choice(list_medium)
+list_difficult = ["YOU KNOW NOTHING","PERFIDIOUSNESS", "UNCOPYRIGHTABLE",
+        "INCOMPREHENSIBILITY", "ANOMALISTIC", "COMPUTER SCIENCE", "TO BE OR NOT TO BE", "GAME OF THRONES", "THIRTEEN REASONS WHY", "MONSTER JACKPOT",
+                  "I AM THE BEST", "PEACE AND LOVE"]
+random_difficult = random.choice(list_difficult)
 
 class ButtonExtended(Button):
     def __init__(self, content = "", *args, **kwargs):
@@ -117,13 +115,42 @@ class ButtonExtended(Button):
     def get_content(self):
       return self.content
 
-buttons = []
-for i in range(len(random_word)):
-    button = ButtonExtended(random_word[i],frame, text = "", width = 5)
-    button.grid(row =0, column = i)
-    buttons.append(button)
+def disable_button():
+    easy.config(state="disabled")
+    medium.config(state="disabled")
+    difficult.config(state="disabled")
 
-make_button()
+buttons = []
+#Guess word:
+def guess(random_word):
+    for i in range(len(random_word)):
+        if random_word[i]== " " :
+            label = Label(frame, text = " ").grid(row = 0, column = i)
+        else:
+            button = ButtonExtended(random_word[i],frame, text = "", width = 5)
+            button.grid(row =0, column = i)
+            buttons.append(button)
+    make_button(random_word)
+    disable_button()
+
+
+
+#GUI:
+root = Tk()
+
+frame = Frame(root)
+frame2 = Frame(root)
+title_label = Label(root, text="Select Mode").pack()
+
+easy = Button(root, text = "Easy", command = lambda:guess(random_easy))
+easy.pack()
+medium = Button(root, text = "Medium", command = lambda:guess(random_medium))
+medium.pack()
+difficult = Button(root, text = "Difficult", command = lambda:guess(random_difficult))
+difficult.pack()
+
+
+
 
 
 frame.pack(side = TOP)
